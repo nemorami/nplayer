@@ -32,7 +32,7 @@ PlayerControls::PlayerControls(QWidget *parent) :
     connect(ui->tbPrevMid, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Mid);});
     connect(ui->tbPrevMin, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Min);});
     connect(ui->tbPrev, &QToolButton::clicked, this, [=](){playlist->previous();});
-
+    connect(ui->tbPrev, &QToolButton::clicked, this, [=](){playlist->next();});
     connect(ui->tbAB,  &QToolButton::clicked, this, &PlayerControls::blockClicked);
 
     connect(ui->tbBlockA, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "A");});
