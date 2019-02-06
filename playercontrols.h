@@ -1,11 +1,14 @@
 #ifndef PLAYERCONTROLS_H
 #define PLAYERCONTROLS_H
 
+#include <QFileInfo>
+#include <QTime>
+#include <QMessageBox>
 #include <QWidget>
 #include "nmediaplayer.h"
 #include <QMediaPlaylist>
 
-#include "blocktimecontrols.h"
+//#include "blocktimecontrols.h"
 #include "playlistview.h"
 class BlockTimeControls;
 namespace Ui {
@@ -18,7 +21,7 @@ class PlayerControls : public QWidget
     Q_OBJECT
 
 public:
-    explicit PlayerControls(QWidget *parent = 0);
+    explicit PlayerControls(QWidget *parent = nullptr);
     ~PlayerControls();
 
     void addToPlaylist(const QList<QUrl> urls);
@@ -36,8 +39,8 @@ public slots:
     void playBackModeClicked();
 private slots:
     void on_tbPlayList_clicked();
-
     void on_tbStart_clicked();
+    void on_hsPlayTime_sliderMoved(int value);
 
 private:
     Ui::PlayerControls *ui; 
@@ -50,5 +53,4 @@ private:
     qint64 blockA;
     qint64 blockB;
 };
-
 #endif // PLAYERCONTROLS_H

@@ -2,24 +2,25 @@
 #include "ui_playlistview.h"
 #include "playlistmodel.h"
 
-PlayListView::PlayListView(QWidget *parent) :
+PlayListView::PlayListView(QWidget *parent, QMediaPlaylist* playlist) :
     QWidget(parent),
     ui(new Ui::PlayListView)
 {
     ui->setupUi(this);
     plm = new PlayListModel(this);
 
+//    if(playlist != nullptr){
+//           _playlist = playlist;
+
+           plm->setPlaylist(playlist);
+           ui->listView->setModel(plm);
+           ui->listView->setCurrentIndex(plm->index(playlist->currentIndex(),0));
+//       }
 }
 
-void PlayListView::showPlayListView(QMediaPlaylist* playlist)
+void PlayListView::showPlayListView()
 {
-    if(playlist != nullptr){
-        _playlist = playlist;
 
-        plm->setPlaylist(_playlist);
-        ui->listView->setModel(plm);
-        ui->listView->setCurrentIndex(plm->index(_playlist->currentIndex(),0));
-    }
     show();
 }
 

@@ -16,15 +16,14 @@ class PlayListView : public QWidget
     Q_OBJECT
 
 public:
-    explicit PlayListView(QWidget *parent = 0);
+    explicit PlayListView(QWidget *parent = nullptr, QMediaPlaylist *playlist = nullptr);
     ~PlayListView();
 
 public slots:
-    void showPlayListView(QMediaPlaylist *playlist);
+    void showPlayListView();
     void playlistChanged(int index);
 private:
-    Ui::PlayListView *ui;
-    QMediaPlaylist* _playlist;
+    Ui::PlayListView *ui; 
     PlayListModel* plm;
 };
 

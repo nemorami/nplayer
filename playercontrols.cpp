@@ -1,9 +1,6 @@
 #include "playercontrols.h"
 #include "ui_playercontrols.h"
-
-#include <QFileInfo>
-#include <QTime>
-#include <QMessageBox>
+#include "blocktimecontrols.h"
 
 PlayerControls::PlayerControls(QWidget *parent) :
      QWidget(parent),
@@ -25,14 +22,14 @@ PlayerControls::PlayerControls(QWidget *parent) :
     player->setPlaylist(playlist);
 
     btc = new BlockTimeControls();
-    plv = new PlayListView();
+    plv = new PlayListView(nullptr, playlist);
 
     connect(ui->tbPlay, &QToolButton::clicked, this, &PlayerControls::playClicked);
     connect(ui->tbPrevMax, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Max);});
     connect(ui->tbPrevMid, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Mid);});
     connect(ui->tbPrevMin, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Min);});
     connect(ui->tbPrev, &QToolButton::clicked, this, [=](){playlist->previous();});
-    connect(ui->tbPrev, &QToolButton::clicked, this, [=](){playlist->next();});
+    connect(ui->tbNext, &QToolButton::clicked, this, [=](){playlist->next();});
     connect(ui->tbAB,  &QToolButton::clicked, this, &PlayerControls::blockClicked);
 
     connect(ui->tbBlockA, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "A");});
@@ -218,7 +215,7 @@ void PlayerControls::addToPlaylist(const QList<QUrl> urls)
         else
             playlist->addMedia(url);
     }
-    // fixed  파일이 2개 이상일 경우 플레이 안됨
+    //FIXME  파일이 2개 이상일 경우 플레이 안됨
     playlist->setCurrentIndex(playlist->mediaCount()-1);
 }
 
@@ -242,12 +239,18 @@ PlayerControls::~PlayerControls()
 
 void PlayerControls::on_tbPlayList_clicked()
 {
-    plv->showPlayListView(playlist);
+    plv->show();
 }
 
 
 void PlayerControls::on_tbStart_clicked()
 {
     //player->set
+
+}
+
+void PlayerControls::on_hsPlayTime_sliderMoved(int value)
+{
+    player->setPosition(value*1000);
 
 }

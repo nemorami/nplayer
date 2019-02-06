@@ -10,13 +10,6 @@ PlayListModel::PlayListModel(QObject *parent)
 
 void PlayListModel::setPlaylist(QMediaPlaylist *playlist)
 {
-    if (_playlist) {
-          disconnect(_playlist, SIGNAL(mediaAboutToBeInserted(int,int)), this, SLOT(beginInsertItems(int,int)));
-          disconnect(_playlist, SIGNAL(mediaInserted(int,int)), this, SLOT(endInsertItems()));
-          disconnect(_playlist, SIGNAL(mediaAboutToBeRemoved(int,int)), this, SLOT(beginRemoveItems(int,int)));
-          disconnect(_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(endRemoveItems()));
-          disconnect(_playlist, SIGNAL(mediaChanged(int,int)), this, SLOT(changeItems(int,int)));
-      }
 
       beginResetModel();
       _playlist = playlist;
@@ -39,9 +32,9 @@ QMediaPlaylist *PlayListModel::playlist() const
 
 bool PlayListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//    Q_UNUSED(role);
-//    _data[index] = value;
-//    emit dataChanged(index, index);
+    Q_UNUSED(role);
+    _data[index] = value;
+    emit dataChanged(index, index);
     return true;
 }
 
