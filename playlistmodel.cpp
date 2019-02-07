@@ -2,41 +2,39 @@
 
 #include <QFileInfo>
 
-PlayListModel::PlayListModel(QObject *parent)
-    :QAbstractItemModel (parent), _playlist(0)
+PlayListModel::PlayListModel(QObject *parent, QMediaPlaylist *playlist)
+    :QAbstractItemModel(parent)
 {
+    _playlist = playlist;
 
-}
+    beginResetModel();
 
-void PlayListModel::setPlaylist(QMediaPlaylist *playlist)
-{
 
-      beginResetModel();
-      _playlist = playlist;
 
-      if (_playlist) {
-          connect(_playlist, SIGNAL(mediaAboutToBeInserted(int,int)), this, SLOT(beginInsertItems(int,int)));
-          connect(_playlist, SIGNAL(mediaInserted(int,int)), this, SLOT(endInsertItems()));
-          connect(_playlist, SIGNAL(mediaAboutToBeRemoved(int,int)), this, SLOT(beginRemoveItems(int,int)));
-          connect(_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(endRemoveItems()));
-          connect(_playlist, SIGNAL(mediaChanged(int,int)), this, SLOT(changeItems(int,int)));
-      }
+    connect(_playlist, SIGNAL(mediaAboutToBeInserted(int,int)), this, SLOT(beginInsertItems(int,int)));
+    connect(_playlist, SIGNAL(mediaInserted(int,int)), this, SLOT(endInsertItems()));
+    connect(_playlist, SIGNAL(mediaAboutToBeRemoved(int,int)), this, SLOT(beginRemoveItems(int,int)));
+    connect(_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(endRemoveItems()));
+    connect(_playlist, SIGNAL(mediaChanged(int,int)), this, SLOT(changeItems(int,int)));
 
-      endResetModel();
-}
 
-QMediaPlaylist *PlayListModel::playlist() const
-{
-    return _playlist;
+    endResetModel();
 }
 
 bool PlayListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Q_UNUSED(role);
     _data[index] = value;
+
     emit dataChanged(index, index);
     return true;
 }
+
+void PlayListModel::dataChange(int row)
+{
+    emit dataChanged(index(row, 0), index(row, 0));
+}
+
 
 int PlayListModel::rowCount(const QModelIndex &parent) const
 {
@@ -67,13 +65,8 @@ QModelIndex PlayListModel::parent(const QModelIndex &child) const
 QVariant PlayListModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid() && role == Qt::DisplayRole) {
-        QVariant value = _data[index];
-        if (!value.isValid() && index.column() == Title) {
             QUrl location = _playlist->media(index.row()).canonicalUrl();
             return QFileInfo(location.path()).fileName();
-        }
-
-        return value;
     }
     return QVariant();
 }

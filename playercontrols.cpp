@@ -20,9 +20,9 @@ PlayerControls::PlayerControls(QWidget *parent) :
     player = new NMediaPlayer();
     playlist = new QMediaPlaylist();
     player->setPlaylist(playlist);
-
+    plm = new PlayListModel(this, playlist);
     btc = new BlockTimeControls();
-    plv = new PlayListView(nullptr, playlist);
+    plv = new PlayListView(nullptr, plm);
 
     connect(ui->tbPlay, &QToolButton::clicked, this, &PlayerControls::playClicked);
     connect(ui->tbPrevMax, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Max);});
@@ -217,6 +217,9 @@ void PlayerControls::addToPlaylist(const QList<QUrl> urls)
     }
     //FIXME  파일이 2개 이상일 경우 플레이 안됨
     playlist->setCurrentIndex(playlist->mediaCount()-1);
+    plm->dataChange(playlist->currentIndex());
+
+
 }
 
 QString PlayerControls::secondToTimeString(int t, const QString& format)

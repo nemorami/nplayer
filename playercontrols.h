@@ -9,6 +9,7 @@
 #include <QMediaPlaylist>
 
 //#include "blocktimecontrols.h"
+#include "playlistmodel.h"
 #include "playlistview.h"
 class BlockTimeControls;
 namespace Ui {
@@ -46,7 +47,7 @@ private:
     Ui::PlayerControls *ui; 
     QMediaPlaylist *playlist;
     NMediaPlayer* player;
-
+    PlayListModel* plm;
     PlayListView* plv;
     BlockTimeControls* btc;
 
