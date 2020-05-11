@@ -3,6 +3,7 @@
 
 #include <QDragEnterEvent>
 #include <QMainWindow>
+#include <QMediaPlaylist>
 #include "playercontrols.h"
 
 namespace Ui {
@@ -18,10 +19,15 @@ public:
     ~MainWindow();
     void dragEnterEvent(QDragEnterEvent *event);
     void open();
+public slots:
+    void togglePlaylistView();
 private:
     Ui::MainWindow *ui;
     PlayerControls *pc;
-
+    QDockWidget *pl;
+    PlaylistView *plv;
+    void addToPlaylist(const QList<QUrl> urls);
+    QMediaPlaylist *playlist;
     // QWidget interface
 protected:
     void dropEvent(QDropEvent *event);

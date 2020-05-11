@@ -1,8 +1,13 @@
 #include "playercontrols.h"
 #include "ui_playercontrols.h"
-#include "blocktimecontrols.h"
 
-PlayerControls::PlayerControls(QWidget *parent) :
+#include <QFileInfo>
+#include <QTime>
+#include <QMessageBox>
+
+//TODO playerlist 끝이면 처음으로 이동.
+
+PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
      QWidget(parent),
     ui(new Ui::PlayerControls)
 {
@@ -17,28 +22,28 @@ PlayerControls::PlayerControls(QWidget *parent) :
 
     ui->frameABControl->hide();
 
-    player = new NMediaPlayer();
-    playlist = new QMediaPlaylist();
+    player = new NMediaPlayer();  
     player->setPlaylist(playlist);
-    plm = new PlayListModel(this, playlist);
+
     btc = new BlockTimeControls();
-    plv = new PlayListView(nullptr, plm);
+
 
     connect(ui->tbPlay, &QToolButton::clicked, this, &PlayerControls::playClicked);
     connect(ui->tbPrevMax, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Max);});
     connect(ui->tbPrevMid, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Mid);});
     connect(ui->tbPrevMin, &QToolButton::clicked, this, [=](){prevClicked(PREV_TIME::Min);});
-    connect(ui->tbPrev, &QToolButton::clicked, this, [=](){playlist->previous();});
-    connect(ui->tbNext, &QToolButton::clicked, this, [=](){playlist->next();});
     connect(ui->tbAB,  &QToolButton::clicked, this, &PlayerControls::blockClicked);
 
     connect(ui->tbBlockA, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "A");});
     connect(ui->tbBlockB, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "B");});
 
+    connect(ui->tbPrevious, &QToolButton::clicked, this, [=](){playlist->previous();});
+    connect(ui->tbNext, &QToolButton::clicked, this, [=](){playlist->next();});
 
-  //  connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
+    connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
+    //connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
 
-    //음악이 바뀔때 슬라이의 최대값을 조정한다.
+    //음악이 바뀔때 슬라이드의 최대값을 조정한다.
     connect(player, &NMediaPlayer::durationChanged, this, [=](qint64 duration){
         ui->hsPlayTime->setMaximum(duration/1000);
         ui->lbDurationEnd->setText(secondToTimeString(duration, "m:ss"));
@@ -54,6 +59,11 @@ PlayerControls::PlayerControls(QWidget *parent) :
         }
     });
 
+    //슬라이드를 움직이면 음악 위치를 바꾼다.
+    connect(ui->hsPlayTime, &QAbstractSlider::sliderMoved, this, [=](int value){
+        player->setPosition(value*1000);
+    });
+
     //음악이 멈췄을때 시작버튼으로 바꾼다
     connect(player, &NMediaPlayer::stateChanged, this, [=](QMediaPlayer::State state){
         if(state == QMediaPlayer::StoppedState){
@@ -62,22 +72,21 @@ PlayerControls::PlayerControls(QWidget *parent) :
 
     });
 
+
+
     //PlayBack 모드 설정
     connect(ui->tbPlayBackMode, &QToolButton::clicked, this, &PlayerControls::playBackModeClicked);
 
 }
 
 
-static bool isPlaylist(const QUrl &url) // Check for ".m3u" playlists.
-{
-    if (!url.isLocalFile())
-        return false;
-    const QFileInfo fileInfo(url.toLocalFile());
-    return fileInfo.exists() && !fileInfo.suffix().compare(QLatin1String("m3u"), Qt::CaseInsensitive);
-}
+
 
 void PlayerControls::playBackModeClicked()
 {
+    QMediaPlaylist *playlist;
+    playlist = player->playlist();
+
     switch(playlist->playbackMode()){
     case QMediaPlaylist::CurrentItemOnce:
         playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
@@ -177,7 +186,7 @@ void PlayerControls::blockClicked()
     }
 }
 
-void PlayerControls::setBlockA(qint64 t)
+void PlayerControls::setBlockA(float t)
 {
     if(t != 0){
         if(blockA+t < blockB){
@@ -191,7 +200,7 @@ void PlayerControls::setBlockA(qint64 t)
     ui->tbBlockA->setText(secondToTimeString(blockA, "mm:ss"));
 }
 
-void PlayerControls::setBlockB(qint64 t)
+void PlayerControls::setBlockB(float t)
 {
     if(t != 0){
         if(blockB+t>blockA){
@@ -205,22 +214,7 @@ void PlayerControls::setBlockB(qint64 t)
     ui->tbBlockB->setText(secondToTimeString(blockB, "mm:ss"));
 }
 
-void PlayerControls::addToPlaylist(const QList<QUrl> urls)
-{
-    for (auto url : urls) {
-        if (url.isEmpty())
-            continue;
-        if (isPlaylist(url))
-            playlist->load(url);
-        else
-            playlist->addMedia(url);
-    }
-    //FIXME  파일이 2개 이상일 경우 플레이 안됨
-    playlist->setCurrentIndex(playlist->mediaCount()-1);
-    plm->dataChange(playlist->currentIndex());
 
-
-}
 
 QString PlayerControls::secondToTimeString(int t, const QString& format)
 {
@@ -234,26 +228,8 @@ QString PlayerControls::secondToTimeString(int t, const QString& format)
 PlayerControls::~PlayerControls()
 {
     delete ui;
-    delete player;
-    delete playlist;
+    delete player;   
     delete btc;
 
 }
 
-void PlayerControls::on_tbPlayList_clicked()
-{
-    plv->show();
-}
-
-
-void PlayerControls::on_tbStart_clicked()
-{
-    //player->set
-
-}
-
-void PlayerControls::on_hsPlayTime_sliderMoved(int value)
-{
-    player->setPosition(value*1000);
-
-}

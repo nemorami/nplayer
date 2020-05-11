@@ -5,27 +5,26 @@
 
 #include <QMediaPlaylist>
 #include <QWidget>
-#include "playlistmodel.h"
 
-class PlayListModel;
+class PlaylistModel;
+
 namespace Ui {
-class PlayListView;
+class PlaylistView;
 }
 
-class PlayListView : public QWidget
+class PlaylistView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PlayListView(QWidget *parent = nullptr, PlayListModel *plm = nullptr);
-    ~PlayListView();
+    explicit PlaylistView(QMediaPlaylist *playlist, QWidget *parent = 0);
+    ~PlaylistView();
 
-public slots:
-    void showPlayListView();
-   // void playlistChanged(int index);
+public slots:  
+    void setHighlight(int index);
 private:
-    Ui::PlayListView *ui; 
-
+    Ui::PlaylistView *ui;
+    PlaylistModel* plm;
 };
 
 #endif // PLAYLISTVIEW_H

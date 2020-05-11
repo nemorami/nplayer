@@ -36,4 +36,8 @@ FORMS    += mainwindow.ui \
     blocktimecontrols.ui \
     playlistview.ui
 
-CONFIG   += c++14
+CONFIG   += c++17
+
+
+DISTFILES += \
+    ChangeLog.txt

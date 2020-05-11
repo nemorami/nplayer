@@ -3,12 +3,11 @@
 
 #include <QDialog>
 
-#include "playercontrols.h"
 
-class PlayerControls;
 namespace Ui {
 class BlockTimeControls;
 }
+class PlayerControls;
 
 class BlockTimeControls : public QDialog
 {

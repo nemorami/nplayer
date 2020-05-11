@@ -1,6 +1,8 @@
 #include "blocktimecontrols.h"
 #include "ui_blocktimecontrols.h"
 
+#include "playercontrols.h"
+
 BlockTimeControls::BlockTimeControls(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BlockTimeControls)
@@ -10,12 +12,12 @@ BlockTimeControls::BlockTimeControls(QWidget *parent) :
     connect(ui->tb_2s, &QToolButton::clicked, this, [=](){setBlockTime(-2);});
     connect(ui->tb_1s, &QToolButton::clicked, this, [=](){setBlockTime(-1);});
     connect(ui->tb_0_5s, &QToolButton::clicked, this, [=](){setBlockTime(-0.5);});
-    connect(ui->tb_0_1s, &QToolButton::clicked, this, [=](){setBlockTime(-0.1);});
+    connect(ui->tb_0_1s, &QToolButton::clicked, this, [=](){setBlockTime(-0.1f);});
 
     connect(ui->tb2s, &QToolButton::clicked, this, [=](){setBlockTime(2);});
     connect(ui->tb1s, &QToolButton::clicked, this, [=](){setBlockTime(1);});
     connect(ui->tb0_5s, &QToolButton::clicked, this, [=](){setBlockTime(0.5);});
-    connect(ui->tb0_1s, &QToolButton::clicked, this, [=](){setBlockTime(0.1);});
+    connect(ui->tb0_1s, &QToolButton::clicked, this, [=](){setBlockTime(0.1f);});
 
 }
 
