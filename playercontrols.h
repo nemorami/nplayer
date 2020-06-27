@@ -12,6 +12,10 @@ namespace Ui {
 class PlayerControls;
 
 }
+enum PlayAction {
+       NEXT,
+       PREVIOUS
+};
 
 class PlayerControls : public QWidget
 {
@@ -29,13 +33,13 @@ public:
 
     void setBlockA(float t);
     void setBlockB(float t);
-
-    void previous();
+    void next_previous(PlayAction action);
 public slots:
     void playClicked();
     void prevClicked(PREV_TIME prev);
     void blockClicked();
     void playBackModeClicked();
+    void previous();
     void next();
 
 private:
@@ -46,6 +50,8 @@ private:
 
     qint64 blockA;
     qint64 blockB;
+
+
 };
 
 #endif // PLAYERCONTROLS_H

@@ -37,7 +37,8 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
     connect(ui->tbBlockA, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "A");});
     connect(ui->tbBlockB, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "B");});
 
-    connect(ui->tbPrevious, &QToolButton::clicked, this, [=](){playlist->previous();});
+    //connect(ui->tbPrevious, &QToolButton::clicked, this, [=](){playlist->previous();});
+    connect(ui->tbPrevious, &QToolButton::clicked, this, &PlayerControls::previous);
     connect(ui->tbNext, &QToolButton::clicked, this, &PlayerControls::next);
 
     connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
@@ -110,6 +111,11 @@ void PlayerControls::playBackModeClicked()
         ui->tbPlayBackMode->setText("CO");
         break;
     }
+}
+
+void PlayerControls::previous()
+{
+    next_previous(PlayAction::PREVIOUS);
 }
 
 void PlayerControls::playClicked()
@@ -214,18 +220,32 @@ void PlayerControls::setBlockB(float t)
     }
     ui->tbBlockB->setText(secondToTimeString(blockB, "mm:ss"));
 }
+
+void PlayerControls::next_previous(PlayAction action)
+{
+    QMediaPlaylist* playlist = player->playlist();
+       QMediaPlaylist::PlaybackMode  current = playlist->playbackMode();
+       if( current == QMediaPlaylist::CurrentItemOnce || current == QMediaPlaylist::CurrentItemInLoop) {
+           playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+       }
+       switch(action){
+       case PlayAction::NEXT:
+           player->playlist()->next();
+           break;
+       case PlayAction::PREVIOUS:
+           player->playlist()->previous();
+           break;
+       }
+
+
+       playlist->setPlaybackMode(current);
+}
 /*
  * playbackmode가 현재곡 또는 현재곡 반복일경우에도 다음곡을 재생
  */
 void PlayerControls::next()
 {
-    QMediaPlaylist* playlist = player->playlist();
-    QMediaPlaylist::PlaybackMode  current = playlist->playbackMode();
-    if( current == QMediaPlaylist::CurrentItemOnce || current == QMediaPlaylist::CurrentItemInLoop) {
-        playlist->setPlaybackMode(QMediaPlaylist::Sequential);
-    }
-    player->playlist()->next();
-    playlist->setPlaybackMode(current);
+   next_previous(PlayAction::NEXT);
 }
 
 
