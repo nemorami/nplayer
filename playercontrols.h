@@ -29,11 +29,14 @@ public:
 
     void setBlockA(float t);
     void setBlockB(float t);
+
+    void previous();
 public slots:
     void playClicked();
     void prevClicked(PREV_TIME prev);
     void blockClicked();
     void playBackModeClicked();
+    void next();
 
 private:
     Ui::PlayerControls *ui;

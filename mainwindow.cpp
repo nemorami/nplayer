@@ -77,7 +77,7 @@ void MainWindow::addToPlaylist(const QList<QUrl> urls)
         else
             playlist->addMedia(url);
     }
-    // fixed  파일이 2개 이상일 경우 플레이 안됨
+
     playlist->setCurrentIndex(playlist->mediaCount()-1);
     plv->setHighlight(playlist->mediaCount()-1);
 

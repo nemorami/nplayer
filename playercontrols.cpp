@@ -38,7 +38,7 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
     connect(ui->tbBlockB, &QToolButton::clicked, this, [=](){btc->showBlockTime(this, "B");});
 
     connect(ui->tbPrevious, &QToolButton::clicked, this, [=](){playlist->previous();});
-    connect(ui->tbNext, &QToolButton::clicked, this, [=](){playlist->next();});
+    connect(ui->tbNext, &QToolButton::clicked, this, &PlayerControls::next);
 
     connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
     //connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
@@ -76,6 +76,7 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
 
     //PlayBack 모드 설정
     connect(ui->tbPlayBackMode, &QToolButton::clicked, this, &PlayerControls::playBackModeClicked);
+    
 
 }
 
@@ -212,6 +213,19 @@ void PlayerControls::setBlockB(float t)
         blockB = player->position();
     }
     ui->tbBlockB->setText(secondToTimeString(blockB, "mm:ss"));
+}
+/*
+ * playbackmode가 현재곡 또는 현재곡 반복일경우에도 다음곡을 재생
+ */
+void PlayerControls::next()
+{
+    QMediaPlaylist* playlist = player->playlist();
+    QMediaPlaylist::PlaybackMode  current = playlist->playbackMode();
+    if( current == QMediaPlaylist::CurrentItemOnce || current == QMediaPlaylist::CurrentItemInLoop) {
+        playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+    }
+    player->playlist()->next();
+    playlist->setPlaybackMode(current);
 }
 
 

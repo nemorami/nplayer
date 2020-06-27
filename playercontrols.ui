@@ -152,6 +152,12 @@
         </item>
         <item>
          <widget class="QToolButton" name="tbPlayBackMode">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="toolTipDuration">
+           <number>-1</number>
+          </property>
           <property name="text">
            <string>S</string>
           </property>
