@@ -41,6 +41,8 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
     connect(ui->tbPrevious, &QToolButton::clicked, this, &PlayerControls::previous);
     connect(ui->tbNext, &QToolButton::clicked, this, &PlayerControls::next);
 
+    connect(ui->tbStart, &QToolButton::clicked, this, [=](){playlist->setCurrentIndex(0);});
+    connect(ui->tbEnd, &QToolButton::clicked, this, [=](){playlist->setCurrentIndex(playlist->mediaCount()-1);});
     connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
     //connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
 
@@ -133,7 +135,12 @@ void PlayerControls::playClicked()
             ui->tbPlay->setIcon(QIcon::fromTheme("media-playback-start"));
             break;
         }
-    } else {
+    // current index is -1 though there is music in playlist
+    } else if (player->playlist()->mediaCount() > 0){
+        next();
+        playClicked();
+    }
+    else {
         QMessageBox::information(this, "", "미디어를 플레이할수 없습니다.");
 
     }
@@ -229,11 +236,15 @@ void PlayerControls::next_previous(PlayAction action)
            playlist->setPlaybackMode(QMediaPlaylist::Sequential);
        }
        switch(action){
-       case PlayAction::NEXT:
+       case PlayAction::NEXT:           
            player->playlist()->next();
+           if(player->playlist()->currentIndex())
+               player->playlist()->next();
            break;
        case PlayAction::PREVIOUS:
            player->playlist()->previous();
+           if(player->playlist()->currentIndex())
+               player->playlist()->previous();
            break;
        }
 
