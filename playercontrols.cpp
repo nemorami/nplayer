@@ -5,7 +5,7 @@
 #include <QTime>
 #include <QMessageBox>
 
-//TODO playerlist 끝이면 처음으로 이동.
+
 
 PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
      QWidget(parent),
@@ -235,18 +235,30 @@ void PlayerControls::next_previous(PlayAction action)
        if( current == QMediaPlaylist::CurrentItemOnce || current == QMediaPlaylist::CurrentItemInLoop) {
            playlist->setPlaybackMode(QMediaPlaylist::Sequential);
        }
-       switch(action){
-       case PlayAction::NEXT:           
-           player->playlist()->next();
-           if(player->playlist()->currentIndex())
-               player->playlist()->next();
-           break;
-       case PlayAction::PREVIOUS:
-           player->playlist()->previous();
-           if(player->playlist()->currentIndex())
-               player->playlist()->previous();
-           break;
-       }
+
+       auto play = [&](){
+           if(action == PlayAction::NEXT)
+               playlist->next();
+           else
+               playlist->previous();
+       };
+
+       play();
+       if(playlist->currentIndex() < 0)
+           play();
+
+//       switch(action){
+//       case PlayAction::NEXT:
+//           player->playlist()->next();
+//           if(player->playlist()->currentIndex() < 0)
+//               player->playlist()->next();
+//           break;
+//       case PlayAction::PREVIOUS:
+//           player->playlist()->previous();
+//           if(player->playlist()->currentIndex() < 0)
+//               player->playlist()->previous();
+//           break;
+//       }
 
 
        playlist->setPlaybackMode(current);
