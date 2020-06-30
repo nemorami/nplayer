@@ -57,7 +57,8 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
         if(blockState == BlockState::D){
             if(position >= blockB)
                 player->setPosition(blockA);
-        }
+        }s
+
     });
 
     //슬라이드를 움직이면 음악 위치를 바꾼다.
