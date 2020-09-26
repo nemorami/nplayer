@@ -4,6 +4,7 @@
 
 
 #include <QMediaPlaylist>
+#include <QToolBar>
 #include <QWidget>
 
 class PlaylistModel;
@@ -25,6 +26,7 @@ public slots:
 private:
     Ui::PlaylistView *ui;
     PlaylistModel* plm;
+    QToolBar *toolbar;
 };
 
 #endif // PLAYLISTVIEW_H

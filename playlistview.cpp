@@ -12,8 +12,8 @@ PlaylistView::PlaylistView(QMediaPlaylist *playlist, QWidget *parent) :
     ui->listView->setModel(plm);
     ui->listView->setCurrentIndex(plm->index(plm->playlist()->currentIndex(),0));
 
-
-
+    // TooBar
+    toolbar = new QToolBar("", this);
 
 }
 
