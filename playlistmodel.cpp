@@ -110,12 +110,19 @@ void PlaylistModel::beginRemoveItems(int start, int end)
 }
 
 void PlaylistModel::endRemoveItems()
-{
-    endInsertRows();
+{    endRemoveRows();
 }
 
 void PlaylistModel::changeItems(int start, int end)
 {
     m_data.clear();
     emit dataChanged(index(start,0), index(end,ColumnCount));
+}
+
+bool PlaylistModel::removeRow(int row){
+
+    if(0 > row || (row + 1) > rowCount())
+        return false;
+    m_playlist->removeMedia(row);
+    return true;
 }
