@@ -36,6 +36,7 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole) override;
 
+    bool removeRow(int row);
 private slots:
     void beginInsertItems(int start, int end);
     void endInsertItems();

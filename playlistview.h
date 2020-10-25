@@ -4,6 +4,7 @@
 
 
 #include <QMediaPlaylist>
+#include <QToolBar>
 #include <QWidget>
 
 class PlaylistModel;
@@ -22,9 +23,13 @@ public:
 
 public slots:  
     void setHighlight(int index);
+    void contextMenu(QPoint point);
+    void deleteItem();
 private:
     Ui::PlaylistView *ui;
     PlaylistModel* plm;
+    QToolBar *toolbar;
+
 };
 
 #endif // PLAYLISTVIEW_H
