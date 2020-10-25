@@ -59,7 +59,7 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
         if(blockState == BlockState::D){
             if(position >= blockB)
                 player->setPosition(blockA);
-        }s
+        }
 
     });
 
