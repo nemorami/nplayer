@@ -46,15 +46,16 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
     connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
     //connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
 
-    //음악이 바뀔때 슬라이드의 최대값을 조정한다.
+    //음악이 바뀔때 슬라이드 라벨에 길이를 표시하고 노티파이 인터벌을 조종한다.
     connect(player, &NMediaPlayer::durationChanged, this, [=](qint64 duration){
-        ui->hsPlayTime->setMaximum(duration/1000);
+        player->setNotifyInterval(duration > 100000 ? 1000 : duration/100);
         ui->lbDurationEnd->setText(secondToTimeString(duration, "m:ss"));
     });
 
     //음악이 플레이될때 슬라이드의 위치를 옮긴다.
     connect(player, &NMediaPlayer::positionChanged, this, [=](qint64 position){
-        ui->hsPlayTime->setValue(position/1000);
+        //if(duration != 0)
+            ui->hsPlayTime->setValue((double)position/player->duration() *99);
         ui->lbDurationPos->setText(secondToTimeString(position, "m:ss"));
         if(blockState == BlockState::D){
             if(position >= blockB)

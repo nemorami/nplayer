@@ -48,6 +48,7 @@ private:
 
     BlockTimeControls* btc;
 
+    //qint64 duration;
     qint64 blockA;
     qint64 blockB;
 
