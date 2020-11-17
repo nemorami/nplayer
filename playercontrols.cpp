@@ -44,6 +44,7 @@ PlayerControls::PlayerControls(QMediaPlaylist *playlist, QWidget *parent) :
     connect(ui->tbStart, &QToolButton::clicked, this, [=](){playlist->setCurrentIndex(0);});
     connect(ui->tbEnd, &QToolButton::clicked, this, [=](){playlist->setCurrentIndex(playlist->mediaCount()-1);});
     connect(ui->tbPlayList, SIGNAL(clicked()), parentWidget(), SLOT(togglePlaylistView()));
+    connect(player, &NMediaPlayer::currentMediaChanged, this, &PlayerControls::currentMediaChanged);
     //connect(playlist, SIGNAL(currentIndexChanged(int)), plv, SLOT(playlistChanged(int)));
 
     //음악이 바뀔때 슬라이드 라벨에 길이를 표시하고 노티파이 인터벌을 조종한다.
@@ -167,6 +168,17 @@ void PlayerControls::prevClicked(PREV_TIME prev)
     player->setPosition(player->position()-time*1000);
 }
 
+void PlayerControls::clearBlockRepeat()
+{
+    blockState = BlockState::A;
+    ui->tbAB->setArrowType(Qt::RightArrow);
+    ui->tbAB->setText("A");
+    ui->tbBlockA->setText("-");
+    ui->tbBlockB->setText("-");
+    ui->frameABControl->hide();
+    ui->frameTimeControl->show();
+}
+
 void PlayerControls::blockClicked()
 {
    // if(!player->isAudioAvailable() || !player->isVideoAvailable())
@@ -190,13 +202,7 @@ void PlayerControls::blockClicked()
         break;
 
     case BlockState::D:
-        blockState = BlockState::A;
-        ui->tbAB->setArrowType(Qt::RightArrow);
-        ui->tbAB->setText("A");
-        ui->tbBlockA->setText("-");
-        ui->tbBlockB->setText("-");
-        ui->frameABControl->hide();
-        ui->frameTimeControl->show();
+        clearBlockRepeat();
         break;
 
     }
@@ -226,6 +232,9 @@ void PlayerControls::setBlockB(float t)
         }
     }else{
         blockB = player->position();
+        // 구간 끝지점이 시작지점 앞일 경우 끝지점을 음악의 끝으로 설정한다.
+        if(blockB < blockA)
+            blockB = player-> duration();
     }
     ui->tbBlockB->setText(secondToTimeString(blockB, "mm:ss"));
 }
@@ -270,7 +279,12 @@ void PlayerControls::next_previous(PlayAction action)
  */
 void PlayerControls::next()
 {
-   next_previous(PlayAction::NEXT);
+    next_previous(PlayAction::NEXT);
+}
+// 미디어가 바뀌면
+void PlayerControls::currentMediaChanged(const QMediaContent &media)
+{
+     clearBlockRepeat();
 }
 
 

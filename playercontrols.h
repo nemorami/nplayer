@@ -34,6 +34,8 @@ public:
     void setBlockA(float t);
     void setBlockB(float t);
     void next_previous(PlayAction action);
+    void clearBlockRepeat();
+
 public slots:
     void playClicked();
     void prevClicked(PREV_TIME prev);
@@ -41,6 +43,7 @@ public slots:
     void playBackModeClicked();
     void previous();
     void next();
+    void currentMediaChanged(const QMediaContent &media);
 
 private:
     Ui::PlayerControls *ui;
