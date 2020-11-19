@@ -42,8 +42,7 @@ public slots:
     void blockClicked();
     void playBackModeClicked();
     void previous();
-    void next();
-    void currentMediaChanged(const QMediaContent &media);
+    void next(); 
 
 private:
     Ui::PlayerControls *ui;
