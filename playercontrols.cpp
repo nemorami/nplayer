@@ -228,11 +228,11 @@ void PlayerControls::blockClicked()
         QMessageBox::information(this, "", "미디어가 없습니다.");
         return;
     }
-
+/*
     if(player->state() != QMediaPlayer::PlayingState){
         QMessageBox::information(this, "", "플레이상태가 아닙니다.");
         return;
-    }
+    }*/
     switch(blockState){
     case BlockState::A:
         setBlockA(0);
@@ -244,6 +244,8 @@ void PlayerControls::blockClicked()
         break;
 
     case BlockState::B:
+        if(!player->position())
+            break;
         setBlockB(0);
         ui->tbAB->setArrowType(Qt::DownArrow);
         ui->tbAB->setText("D");
