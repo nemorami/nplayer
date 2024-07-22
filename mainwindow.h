@@ -3,7 +3,7 @@
 
 #include <QDragEnterEvent>
 #include <QMainWindow>
-#include <QMediaPlaylist>
+#include "qmediaplaylist.h"
 #include "playercontrols.h"
 
 namespace Ui {

@@ -9,15 +9,15 @@ BlockTimeControls::BlockTimeControls(QWidget *parent) :
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
-    connect(ui->tb_2s, &QToolButton::clicked, this, [=](){setBlockTime(-2);});
-    connect(ui->tb_1s, &QToolButton::clicked, this, [=](){setBlockTime(-1);});
-    connect(ui->tb_0_5s, &QToolButton::clicked, this, [=](){setBlockTime(-0.5);});
-    connect(ui->tb_0_1s, &QToolButton::clicked, this, [=](){setBlockTime(-0.1f);});
+    connect(ui->tb_2s, &QToolButton::clicked, this, [=, this](){setBlockTime(-2);});
+    connect(ui->tb_1s, &QToolButton::clicked, this, [=, this](){setBlockTime(-1);});
+    connect(ui->tb_0_5s, &QToolButton::clicked, this, [=, this](){setBlockTime(-0.5);});
+    connect(ui->tb_0_1s, &QToolButton::clicked, this, [=, this](){setBlockTime(-0.1f);});
 
-    connect(ui->tb2s, &QToolButton::clicked, this, [=](){setBlockTime(2);});
-    connect(ui->tb1s, &QToolButton::clicked, this, [=](){setBlockTime(1);});
-    connect(ui->tb0_5s, &QToolButton::clicked, this, [=](){setBlockTime(0.5);});
-    connect(ui->tb0_1s, &QToolButton::clicked, this, [=](){setBlockTime(0.1f);});
+    connect(ui->tb2s, &QToolButton::clicked, this, [=, this](){setBlockTime(2);});
+    connect(ui->tb1s, &QToolButton::clicked, this, [=, this](){setBlockTime(1);});
+    connect(ui->tb0_5s, &QToolButton::clicked, this, [=, this](){setBlockTime(0.5);});
+    connect(ui->tb0_1s, &QToolButton::clicked, this, [=, this](){setBlockTime(0.1f);});
 
 }
 

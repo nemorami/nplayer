@@ -45,7 +45,7 @@ private slots:
     void changeItems(int start, int end);
 
 private:
-    QScopedPointer<QMediaPlaylist> m_playlist;
+    QScopedPointer"qmediaplaylist.h" m_playlist;
     QMap<QModelIndex, QVariant> m_data;
 };
 

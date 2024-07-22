@@ -22,21 +22,25 @@ SOURCES += main.cpp\
     nmediaplayer.cpp \
     blocktimecontrols.cpp \
     playlistview.cpp \
-    playlistmodel.cpp
+    playlistmodel.cpp \
+    qmediaplaylist.cpp \
+    qmediaplaylist_p.cpp
 
 HEADERS  += mainwindow.h \
     playercontrols.h \
     nmediaplayer.h \
     blocktimecontrols.h \
     playlistview.h \
-    playlistmodel.h
+    playlistmodel.h \
+    qmediaplaylist.h \
+    qmediaplaylist_p.h
 
 FORMS    += mainwindow.ui \
     playercontrols.ui \
     blocktimecontrols.ui \
     playlistview.ui
 
-CONFIG   += c++17
+CONFIG   += c++20
 
 
 DISTFILES += \

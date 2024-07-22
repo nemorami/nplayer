@@ -3,7 +3,7 @@
 
 
 
-#include <QMediaPlaylist>
+#include "qmediaplaylist.h"
 #include <QToolBar>
 #include <QWidget>
 

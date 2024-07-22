@@ -3,7 +3,7 @@
 
 #include <QFileInfo>
 #include <QUrl>
-#include <QMediaPlaylist>
+#include "qmediaplaylist.h"
 
 
 PlaylistModel::PlaylistModel(QObject *parent)
